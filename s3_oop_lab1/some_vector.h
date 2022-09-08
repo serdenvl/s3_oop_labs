@@ -14,12 +14,12 @@ namespace some_namespace {
     public:
         some_vector(double x = 0.0, double y = 0.0, double z = 0.0) : x(x), y(y), z(z)
         {
-            std::cout << "Constructor " << std::string(*this) << std::endl;
+            std::cout << "Constructor A " << std::string(*this) << std::endl;
         }
 
         some_vector(const some_vector& it) : x(it.get_x()), y(it.get_y()), z(it.get_z())
         {
-            std::cout << "Constructor " << std::string(*this) << std::endl;
+            std::cout << "Constructor B " << std::string(*this) << std::endl;
         }
 
         ~some_vector()
@@ -27,15 +27,15 @@ namespace some_namespace {
             std::cout << "Destructor " << std::string(*this) << std::endl;
         }
 
-        some_vector operator=(const some_vector& other) const;
+        some_vector operator=(const some_vector&) const;
 
         double get_x() const;
         double get_y() const;
         double get_z() const;
 
-        void set_x(double val);
-        void set_y(double val);
-        void set_z(double val);
+        void set_x(double);
+        void set_y(double);
+        void set_z(double);
 
         operator std::string() const;
 

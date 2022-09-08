@@ -40,7 +40,7 @@ namespace some_namespace {
 
     some_vector some_vector::copy() const
     {
-        return some_vector(x, y, z);
+        return some_vector(*this);
     }
 
     some_vector some_vector::scalar_prod(double a) const
