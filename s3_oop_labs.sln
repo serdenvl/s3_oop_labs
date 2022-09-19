@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32505.173
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "s3_oop_lab1", "s3_oop_lab1\s3_oop_lab1.vcxproj", "{FCCDC10A-7857-46C6-95F1-83E0481822F0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "s3_oop_lab2", "s3_oop_lab2\s3_oop_lab2.vcxproj", "{53360BDB-A398-43D7-899F-ADE86A9F4E6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,14 @@ Global
 		{FCCDC10A-7857-46C6-95F1-83E0481822F0}.Release|x64.Build.0 = Release|x64
 		{FCCDC10A-7857-46C6-95F1-83E0481822F0}.Release|x86.ActiveCfg = Release|Win32
 		{FCCDC10A-7857-46C6-95F1-83E0481822F0}.Release|x86.Build.0 = Release|Win32
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Debug|x64.ActiveCfg = Debug|x64
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Debug|x64.Build.0 = Debug|x64
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Debug|x86.ActiveCfg = Debug|Win32
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Debug|x86.Build.0 = Debug|Win32
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Release|x64.ActiveCfg = Release|x64
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Release|x64.Build.0 = Release|x64
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Release|x86.ActiveCfg = Release|Win32
+		{53360BDB-A398-43D7-899F-ADE86A9F4E6B}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
