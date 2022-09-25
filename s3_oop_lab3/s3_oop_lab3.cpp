@@ -5,6 +5,8 @@
 #include "just_matrix.h"
 #include "just_vector.h"
 
+using namespace just_namespace;
+
 int main()
 {
     just_matrix m(5, 5, [](auto i, auto j) {return i == j; });

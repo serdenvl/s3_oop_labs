@@ -4,6 +4,8 @@
 #include <iostream>
 #include "some_matrix.h"
 
+using namespace some_namespace;
+
 int main()
 {
     some_matrix e(4, 4, [](auto i, auto j) {return i == j; });
