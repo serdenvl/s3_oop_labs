@@ -24,15 +24,6 @@ namespace some_namespace {
         return some_vector(other);
     }
 
-    some_vector::operator std::string() const
-    {
-        return (stringstream() 
-            << "some_vector" 
-            << "[" << this << "]" 
-            << "(x = " << x << ", y = " << y << ", z = " << z << ")"
-            ).str();
-    }
-
     double some_vector::len() const
     {
         return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));

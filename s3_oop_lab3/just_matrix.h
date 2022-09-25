@@ -19,10 +19,14 @@ public:
 	just_matrix(const ind& row_number = 1, const ind& col_number = 1,
 		const init_matrix_callback& init = _default_matrix_callback) : row_number(row_number), col_number(col_number)
 	{
-		std::cout << "Constructor" << " "
-			<< "[" << this << "]" << " "
-			<< "matrix(" << row_number << ":" << col_number << ")" << " "
-			<< "init: " << ( (&init == &_default_matrix_callback) ? "default" : "some") << std::endl;
+		std::cout << "Constructor"
+			<< " "
+			<< "[" << this << "]"
+			<< " "
+			<< "matrix(" << row_number << ":" << col_number << ")"
+			<< " "
+			<< "init: " << ((&init == &_default_matrix_callback) ? "default" : "some")
+			<< std::endl;
 
 		buffer = new double[row_number * col_number];
 		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
@@ -30,9 +34,12 @@ public:
 
 	just_matrix(const just_matrix& source) : row_number(source.row_number), col_number(source.col_number)
 	{
-		std::cout << "Constructor" << " "
-			<< "[" << this << "]" << " "
-			<< "matrix(" << &source << ")" << std::endl;
+		std::cout << "Constructor"
+			<< " "
+			<< "[" << this << "]"
+			<< " "
+			<< "matrix(" << &source << ")"
+			<< std::endl;
 
 		buffer = new double[row_number * col_number];
 		for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
@@ -40,8 +47,12 @@ public:
 
 	virtual ~just_matrix()
 	{
-		std::cout << "Destructor" << " "
-			<< "[" << this << "]" << std::endl;
+		std::cout << "Destructor"
+			<< " "
+			<< "[" << this << "]" 
+			<< " "
+			<< "matrix"
+			<< std::endl;
 
 		delete[] buffer;
 	}

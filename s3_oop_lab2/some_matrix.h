@@ -4,8 +4,8 @@
 #include <istream>
 #include <functional>
 
-typedef std::function<double(unsigned int, unsigned int)> init_callback;
-#define _default_callback [](unsigned int i, unsigned int j) { return 0.0; }
+using init_callback = std::function<double(unsigned int, unsigned int)>;
+const init_callback _default_callback = [](unsigned int i, unsigned int j) { return 0.0; };
 
 class some_matrix
 {
@@ -17,9 +17,14 @@ public:
 
 	some_matrix(unsigned int row_number, unsigned int col_number, init_callback init = _default_callback) : row_number(row_number), col_number(col_number)
 	{
-		std::cout << "Constructor A "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< "[" << this << "]" << std::endl;
+		std::cout << "Constructor" 
+			<< " "
+			<< "[" << this << "]" 
+			<< " "
+			<< "matrix(" << row_number << ":" << col_number << ")" 
+			<< " "
+			<< "init: " << ((&init == &_default_callback) ? "default" : "some") 
+			<< std::endl;
 
 		buffer = new double[row_number * col_number];
 		for (unsigned int i = 0; i < row_number * col_number; ++i)
@@ -28,34 +33,46 @@ public:
 
 	some_matrix(unsigned int size, init_callback init = _default_callback) : some_matrix(size, size, init)
 	{
-		std::cout << "Constructor B "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< "[" << this << "]" << std::endl;
+		std::cout << "Constructor" 
+			<< " "
+			<< "[" << this << "]" 
+			<< " "
+			<< "matrix(" << size << ")"
+			<< " "
+			<< "init: " << ((&init == &_default_callback) ? "default" : "some") 
+			<< std::endl;
 	}
 
 	some_matrix() : some_matrix(1, 1, _default_callback)
 	{
-		std::cout << "Constructor C "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< "[" << this << "]" << std::endl;
+		std::cout << "Constructor" 
+			<< " "
+			<< "[" << this << "]" 
+			<< " "
+			<< "matrix()" 
+			<< std::endl;
 	}
 
-	some_matrix(const some_matrix& m) : row_number(m.row_number), col_number(m.col_number)
+	some_matrix(const some_matrix& source) : row_number(source.row_number), col_number(source.col_number)
 	{
-		std::cout << "Constructor D "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< "[" << this << "]" << std::endl;
+		std::cout << "Constructor" 
+			<< " "
+			<< "[" << this << "]" 
+			<< " "
+			<< "matrix(" << &source << ")" 
+			<< std::endl;
 
 		buffer = new double[row_number * col_number];
 		for (unsigned int i = 0; i < row_number * col_number; ++i)
-			buffer[i] = m.buffer[i];
+			buffer[i] = source.buffer[i];
 	}
 
 	~some_matrix()
 	{
-		std::cout << "Destructor "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< "[" << this << "]" << std::endl;
+		std::cout << "Destructor" 
+			<< " "
+			<< "[" << this << "]" 
+			<< std::endl;
 
 		delete [] buffer;
 	}
