@@ -18,7 +18,7 @@ namespace some_namespace {
                 << " "
                 << "[" << this << "]"
                 << " "
-                << "vector(" << x << " : " << y << " : " << z << ")"
+                << "vector(" << x << ":" << y << ":" << z << ")"
                 << std::endl;
         }
 
