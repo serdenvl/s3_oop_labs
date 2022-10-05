@@ -4,18 +4,26 @@
 #include <iostream>
 #include "some_matrix.h"
 
+using namespace std;
 using namespace some_namespace;
 
 int main()
 {
-    some_matrix e(4, 4, [](auto i, auto j) {return i == j; });
-    some_matrix m(4, 5, [](auto i, auto j) {return i + j; });
+    try
+    {
+        some_matrix e(4, 4, [](auto i, auto j) {return i == j; });
+        some_matrix m(4, 5, [](auto i, auto j) {return i + j; });
 
-    std::cout << "e\n" << e << "m\n" << m << "e*m\n" << e*m;
+        cout << "e\n" << e << "m\n" << m << "e*m\n" << e * m;
 
-    e *= m;
+        e *= m;
 
-    std::cout << "e*=m\n" << e;\
+        cout << "e*=m\n" << e;
+    }
+    catch (const char* message)
+    {
+        cout << "\nerror: " << message;
+    }
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

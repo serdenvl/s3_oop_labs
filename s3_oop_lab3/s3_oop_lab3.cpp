@@ -5,14 +5,22 @@
 #include "just_matrix.h"
 #include "just_vector.h"
 
+using namespace std;
 using namespace just_namespace;
 
 int main()
 {
-    just_matrix m(5, 5, [](auto i, auto j) {return i == j; });
-    just_vector v(5, [](auto i) {return i; });
+    try
+    {
+        just_matrix m(5, 5, [](auto i, auto j) {return i == j; });
+        just_vector v(5, [](auto i) {return i; });
 
-    std::cout << m*v;
+        std::cout << m * v;
+    }
+    catch(const char* message)
+    {
+        cout << "\nerror: " << message << endl;
+    }
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

@@ -68,7 +68,7 @@ namespace some_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		for_each([&](auto v, auto i, auto j) { v += other(i, j); });
@@ -78,7 +78,7 @@ namespace some_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		for_each([&](auto v, auto i, auto j) { v -= other(i, j); });
@@ -112,7 +112,7 @@ namespace some_namespace
 	{
 		if (!A.is_suitable_for_addiction(B))
 		{
-			throw invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		return some_matrix(A.get_col_number(), A.get_row_number(), [&](auto i, auto j) { return A(i, j) + B(i, j); });
@@ -122,7 +122,7 @@ namespace some_namespace
 	{
 		if (!A.is_suitable_for_addiction(B))
 		{
-			throw invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		return some_matrix(A.get_col_number(), A.get_row_number(), [&](auto i, auto j) { return A(i, j) - B(i, j); });
@@ -132,7 +132,7 @@ namespace some_namespace
 	{
 		if (!A.is_suitable_for_multiplication(B))
 		{
-			throw invalid_argument("multiplication is impossible");
+			throw "multiplication is impossible";
 		}
 
 		double sum;

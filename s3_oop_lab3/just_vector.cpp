@@ -1,5 +1,7 @@
 #include "just_vector.h"
 
+using namespace std;
+
 namespace just_namespace
 {
 

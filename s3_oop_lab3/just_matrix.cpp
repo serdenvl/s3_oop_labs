@@ -2,16 +2,18 @@
 #include <string>
 #include <iomanip>
 
+using namespace std;
+
 namespace just_namespace
 {
 
-	void just_matrix::for_each(std::function<void(double&)> callback) const
+	void just_matrix::for_each(function<void(double&)> callback) const
 	{
 		for (ind i = 0; i < row_number * col_number; ++i)
 			callback(buffer[i]);
 	}
 
-	void just_matrix::for_each(std::function<void(double&, const ind&, const ind&)> callback) const
+	void just_matrix::for_each(function<void(double&, const ind&, const ind&)> callback) const
 	{
 		for (ind i = 0; i < row_number * col_number; ++i)
 			callback(buffer[i], i / col_number, i % col_number);
@@ -31,7 +33,7 @@ namespace just_namespace
 	{
 		if (!(0 <= i && i < row_number) || !(0 <= j && j < col_number))
 		{
-			throw std::invalid_argument("index out of range");
+			throw "index out of range";
 		}
 
 		return buffer[i * col_number + j];
@@ -46,7 +48,7 @@ namespace just_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw std::invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v += other(i, j); });
@@ -56,7 +58,7 @@ namespace just_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw std::invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v -= other(i, j); });
@@ -66,7 +68,7 @@ namespace just_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw std::invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		return just_matrix(row_number, col_number, [&](auto i, auto j) { return (*this)(i, j) + other(i, j); });
@@ -76,7 +78,7 @@ namespace just_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw std::invalid_argument("addiction is impossible");
+			throw "addiction is impossible";
 		}
 
 		return just_matrix(row_number, col_number, [&](auto i, auto j) { return (*this)(i, j) - other(i, j); });
@@ -86,21 +88,21 @@ namespace just_namespace
 	{
 		if (!is_suitable_for_multiplication(other))
 		{
-			throw std::invalid_argument("multiplication is impossible");
+			throw "multiplication is impossible";
 		}
 
 		just_matrix m = (*this) * other;
 
 		row_number = m.row_number;
 		col_number = m.col_number;
-		delete[] std::exchange(buffer, std::exchange(m.buffer, nullptr));
+		delete[] exchange(buffer, exchange(m.buffer, nullptr));
 	}
 
 	just_matrix just_matrix::operator*(const just_matrix& other) const
 	{
 		if (!is_suitable_for_multiplication(other))
 		{
-			throw std::invalid_argument("multiplication is impossible");
+			throw "multiplication is impossible";
 		}
 
 		return just_matrix(row_number, other.col_number, [&](auto i, auto j) {
@@ -123,13 +125,13 @@ namespace just_namespace
 		return just_matrix(row_number, col_number, [&](auto i, auto j) { return (*this)(i, j) * a; });
 	}
 
-	std::ostream& operator<<(std::ostream& output, const just_matrix& matrix)
+	ostream& operator<<(ostream& output, const just_matrix& matrix)
 	{
 		matrix.for_each([&](auto v, auto i, auto j)
 			{
-				output << std::setw(3) << matrix(i, j);
+				output << setw(3) << matrix(i, j);
 				if (j + 1 == matrix.col_number)
-					output << std::endl;
+					output << endl;
 			});
 		return output;
 	}
