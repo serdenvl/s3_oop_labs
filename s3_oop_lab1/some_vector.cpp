@@ -9,6 +9,8 @@ using namespace std;
 #include <string>
 #include <sstream>
 
+static size_t ID = 0;
+
 namespace some_namespace {
 
     double some_vector::get_x() const { return x; }
@@ -19,9 +21,42 @@ namespace some_namespace {
     void some_vector::set_y(double val) { y = val; }
     void some_vector::set_z(double val) { z = val; }
 
-    some_vector some_vector::operator=(const some_vector& other) const
+    some_vector::some_vector(double x, double y, double z) : x(x), y(y), z(z), id(++ID)
     {
-        return some_vector(other);
+        std::cout << "Constructor"
+            << " "
+            << "vector(" << x << ":" << y << ":" << z << ")"
+            << " "
+            << "[" << "#" << id << " | " << this << "]"
+            << std::endl;
+    }
+
+    some_vector::some_vector(const some_vector& other) : x(other.x), y(other.y), z(other.z), id(++ID)
+    {
+        std::cout << "Constructor"
+            << " "
+            << "vector(" << "#" << id << " | " << &other << ")"
+            << " "
+            << "[" << "#" << id << " | " << this << "]"
+            << std::endl;
+    }
+
+    some_vector::~some_vector()
+    {
+        std::cout << "Destructor"
+            << " "
+            << "vector"
+            << " "
+            << "[" << "#" << id << " | " << this << "]"
+            << std::endl;
+    }
+
+    some_vector& some_vector::operator=(const some_vector& other)
+    {
+        x = other.x;
+        y = other.y;
+        z = other.z;
+        return *this;
     }
 
     double some_vector::len() const
@@ -29,19 +64,22 @@ namespace some_namespace {
         return sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
     }
 
-    some_vector some_vector::copy() const
+    some_vector& some_vector::scalar_prod(double a)
     {
-        return some_vector(*this);
+        x *= a; 
+        y *= a; 
+        z *= a; 
+        return *this;
     }
 
-    some_vector some_vector::scalar_prod(double a) const
-    {
-        return some_vector(x * a, y * a, z * a);
-    }
-
-    some_vector some_vector::norm() const
+    some_vector& some_vector::norm()
     {
         return scalar_prod(1 / len());
+    }
+
+    std::ostream& operator<<(std::ostream& output, const some_vector& it)
+    {
+        return output << it.x << " " << it.y << " " << it.z;
     }
 
     some_vector sum_vectors(const some_vector& a, const some_vector& b)
@@ -56,22 +94,21 @@ namespace some_namespace {
 
     some_vector prod_vectors(const some_vector& a, const some_vector& b)
     {
-        double comps_a[3] = { a.get_y(), a.get_z(), a.get_x() };
-        double comps_b[3] = { b.get_y(), b.get_z(), b.get_x() };
+        double comps_a[3] = { a.get_x(), a.get_y(), a.get_z() };
+        double comps_b[3] = { b.get_x(), b.get_y(), b.get_z() };
 
         double buf[3];
-        for (int i = 0; i < 3; ++i)
-        {
-            buf[i] = comps_a[i] * comps_b[(i + 1) % 3] - comps_a[(i + 1) % 3] * comps_b[i];
-        }
-
-        return some_vector(*buf);
+        for (size_t i = 0; i < 3; ++i)
+            buf[i] = comps_a[(i + 1) % 3] * comps_b[(i + 2) % 3] - comps_a[(i + 2) % 3] * comps_b[(i + 1) % 3];
+        
+        return some_vector(buf[0], buf[1], buf[2]);
     }
 
     double scalar_prod_vectors(const some_vector& a, const some_vector& b)
     {
         double comps_a[3] = { a.get_x(), a.get_y(), a.get_z() };
         double comps_b[3] = { b.get_x(), b.get_y(), b.get_z() };
+
 
         double res = 0.0;
         for (int i = 0; i < 3; ++i)
@@ -101,8 +138,8 @@ namespace some_namespace {
 
     double angle_between_vectors(const some_vector& a, const some_vector& b)
     {
-        double get_x = cos_between_vectors(a, b);
-        double get_y = sin_between_vectors(a, b);
-        return atan2(get_y, get_x) * 180 / M_PI;
+        double x_ = cos_between_vectors(a, b);
+        double y_ = sin_between_vectors(a, b);
+        return atan2(y_, x_) * 180 / M_PI;
     }
 }

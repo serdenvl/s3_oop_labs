@@ -7,12 +7,37 @@ using namespace std;
 #include "some_vector.h"
 using namespace some_namespace;
 
+void do_stuffs()
+{
+    some_vector a(1, 2, 3);
+    some_vector b(4, 5, 6);
+    cout << endl;
+
+    cout << a << " + " << b << " = " << sum_vectors(a, b) << endl;
+    cout << a << " - " << b << " = " << sub_vectors(a, b) << endl;
+    cout << a << " * " << b << " = " << prod_vectors(a, b) << endl;
+
+    cout << endl;
+
+    cout << "cos " << a << " ^ " << b << " = " << cos_between_vectors(a, b) << endl;
+    cout << "sin " << a << " ^ " << b << " = " << sin_between_vectors(a, b) << endl;
+    cout << "ang " << a << " ^ " << b << " = " << angle_between_vectors(a, b) << endl;
+
+    cout << endl;
+
+    some_vector c(5, 0, 0);
+
+    cout << c << " * " << 5 << " = " << c.scalar_prod(5) << endl;
+    cout << "vector " << c;
+    cout << " len " << c.len();
+    cout << " norm " << c.norm() << endl;
+
+    cout << endl;
+}
+
 int main()
 {
-    some_vector a = some_vector(4, 0, 0);
-    some_vector b = some_vector(4, 7, 0);
-    cout << angle_between_vectors(a, b) << endl;
-    cout << cos_between_vectors(a,b) << endl;
+    do_stuffs();
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"

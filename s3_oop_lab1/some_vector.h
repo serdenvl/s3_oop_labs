@@ -1,48 +1,25 @@
 #pragma once
-
 #include <iostream>
-#include <string>
 
 namespace some_namespace {
 
     class some_vector
     {
     private:
+        size_t id;
         double x, y, z;
 
 
     public:
-        some_vector(double x = 0.0, double y = 0.0, double z = 0.0) : x(x), y(y), z(z)
-        {
-            std::cout << "Constructor"
-                << " "
-                << "[" << this << "]"
-                << " "
-                << "vector(" << x << ":" << y << ":" << z << ")"
-                << std::endl;
-        }
+        some_vector(double x = 0.0, double y = 0.0, double z = 0.0);
 
-        some_vector(const some_vector& it) : x(it.get_x()), y(it.get_y()), z(it.get_z())
-        {
-            std::cout << "Constructor"
-                << " "
-                << "[" << this << "]"
-                << " "
-                << "vector(" << &it << ")"
-                << std::endl;
-        }
+        some_vector(const some_vector& other);
 
-        ~some_vector()
-        {
-            std::cout << "Destructor"
-                << " "
-                << "[" << this << "]"
-                << " "
-                << "vector"
-                << std::endl;
-        }
+        ~some_vector();
 
-        some_vector operator=(const some_vector&) const;
+        friend std::ostream& operator<<(std::ostream& output, const some_vector& it);
+
+        some_vector& operator=(const some_vector&);
 
         double get_x() const;
         double get_y() const;
@@ -54,11 +31,9 @@ namespace some_namespace {
 
         double len() const;
 
-        some_vector copy() const;
+        some_vector& scalar_prod(double a);
 
-        some_vector scalar_prod(double a) const;
-
-        some_vector norm() const;
+        some_vector& norm();
     };
 
     some_vector sum_vectors(const some_vector& a, const some_vector& b);
