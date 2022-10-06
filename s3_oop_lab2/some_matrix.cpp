@@ -1,5 +1,5 @@
 #include "some_matrix.h"
-#include <string>
+#include <sstream>
 #include <iomanip>
 
 using namespace std;
@@ -11,11 +11,9 @@ namespace some_namespace
 	some_matrix::some_matrix(size_t row_number, size_t col_number, init_callback init)
 		: row_number(row_number), col_number(col_number), id(++ID)
 	{
-		cout << "Constructor"
+		cout << setw(50) << right << "Constructor"
 			<< " "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< " "
-			<< "init: " << ((&init == &_default_callback) ? "default" : "some")
+			<< "matrix(" << row_number << "," << col_number << ")"
 			<< " "
 			<< "[" << "#" << id << " | " << this << "]"
 			<< endl;
@@ -25,7 +23,7 @@ namespace some_namespace
 		{
 			if (i / col_number == 4)
 			{
-				 i = i;
+				i = i;
 			}
 			buffer[i] = init(i / col_number, i % col_number);
 		}
@@ -33,11 +31,9 @@ namespace some_namespace
 
 	some_matrix::some_matrix(size_t size, init_callback init) : some_matrix(size, size, init)
 	{
-		cout << "Constructor"
+		cout << setw(50) << right << "Constructor"
 			<< " "
 			<< "matrix(" << size << ")"
-			<< " "
-			<< "init: " << ((&init == &_default_callback) ? "default" : "some")
 			<< " "
 			<< "[" << "#" << id << " | " << this << "]"
 			<< endl;
@@ -45,7 +41,7 @@ namespace some_namespace
 
 	some_matrix::some_matrix() : some_matrix(1, 1, _default_callback)
 	{
-		cout << "Constructor"
+		cout << setw(50) << right << "Constructor"
 			<< " "
 			<< "matrix()"
 			<< " "
@@ -55,7 +51,7 @@ namespace some_namespace
 
 	some_matrix::some_matrix(const some_matrix& source) : row_number(source.row_number), col_number(source.col_number), id(++ID)
 	{
-		cout << "Constructor"
+		cout << setw(50) << right << "Constructor"
 			<< " "
 			<< "matrix(" << &source << ")"
 			<< " "
@@ -69,7 +65,7 @@ namespace some_namespace
 
 	some_matrix::~some_matrix()
 	{
-		cout << "Destructor"
+		cout << setw(50) << right << "Destructor"
 			<< " "
 			<< "matrix"
 			<< " "
@@ -77,6 +73,11 @@ namespace some_namespace
 			<< endl;
 
 		delete[] buffer;
+	}
+
+	size_t some_matrix::get_id() const
+	{
+		return id;
 	}
 
 	size_t some_matrix::get_row_number() const
@@ -130,7 +131,15 @@ namespace some_namespace
 	double& some_matrix::operator[](const inds&& indexs) const
 	{
 		if (!(0 <= indexs[0] && indexs[0] < row_number) || !(0 <= indexs[1] && indexs[1] < col_number))
-			throw "out of range";
+		{
+			ostringstream message;
+			message << "accessing an element"
+				<< " "
+				<< "by index " << "(" << indexs[0] << "," << indexs[1] << ")"
+				<< " "
+				<< "of the matrix #" << id << " " << "(size:" << row_number << "x" << col_number << ")";
+			throw out_of_range(message.str());
+		}
 
 		return buffer[indexs[0] * col_number + indexs[1]];
 	}
@@ -153,7 +162,15 @@ namespace some_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row_number << "x" << col_number << ")"
+				<< " "
+				<< "+="
+				<< "matrix #" << other.id << "(size:" << other.row_number << "x" << other.col_number << ")";
+
+			throw logic_error(message.str());
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v += other[inds{i, j}]; });
@@ -163,7 +180,15 @@ namespace some_namespace
 	{
 		if (!is_suitable_for_addiction(other))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row_number << "x" << col_number << ")"
+				<< " "
+				<< "-="
+				<< "matrix #" << other.id << "(size:" << other.row_number << "x" << other.col_number << ")";
+
+			throw logic_error(message.str());
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v -= other[inds{i, j}]; });
@@ -186,7 +211,7 @@ namespace some_namespace
 	{
 		matrix.for_each([&](auto v, auto i, auto j)
 			{
-				out << setw(3) << matrix[inds{i, j}];
+				out << setw(3) << matrix[inds{i, j}] << " ";
 				if (j + 1 == matrix.col_number)
 					out << endl;
 			});
@@ -197,7 +222,16 @@ namespace some_namespace
 	{
 		if (!A.is_suitable_for_addiction(B))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << A.get_id() << "(size:" << A.get_row_number() << "x" << A.get_col_number() << ")"
+				<< " "
+				<< "+"
+				<< " "
+				<< "matrix #" << B.get_id() << "(size:" << B.get_row_number() << "x" << B.get_col_number() << ")";
+
+			throw logic_error(message.str());
 		}
 
 		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{i, j}] + B[inds{i, j}]; });
@@ -207,7 +241,16 @@ namespace some_namespace
 	{
 		if (!A.is_suitable_for_addiction(B))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << A.get_id() << "(size:" << A.get_row_number() << "x" << A.get_col_number() << ")"
+				<< " "
+				<< "-"
+				<< " "
+				<< "matrix #" << B.get_id() << "(size:" << B.get_row_number() << "x" << B.get_col_number() << ")";
+
+			throw logic_error(message.str());
 		}
 
 		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{i, j}] - B[inds{i, j}]; });
@@ -217,7 +260,16 @@ namespace some_namespace
 	{
 		if (!A.is_suitable_for_multiplication(B))
 		{
-			throw "multiplication is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << A.get_id() << "(size:" << A.get_row_number() << "x" << A.get_col_number() << ")"
+				<< " "
+				<< "*"
+				<< " "
+				<< "matrix #" << B.get_id() << "(size:" << B.get_row_number() << "x" << B.get_col_number() << ")";
+
+			throw logic_error(message.str());
 		}
 
 		double sum;

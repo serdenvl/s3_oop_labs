@@ -9,9 +9,9 @@ using namespace some_namespace;
 
 void do_stuffs()
 {
-    some_matrix e(4, 4, [&](auto i, auto j) {return i == j; });
-    some_matrix a(4, 6, [&](auto i, auto j) {return i + j; });
-    some_matrix b(4, 6, [&](auto i, auto j) {return i * j; });
+    some_matrix e(4, [&](auto i, auto j) {return i == j; });
+    some_matrix a(4, 5, [&](auto i, auto j) {return i + j; });
+    some_matrix b(4, 5, [&](auto i, auto j) {return i * j; });
 
     cout << "e: " << endl << e << endl;
     cout << "a: " << endl << a << endl;
@@ -27,9 +27,9 @@ void do_stuffs()
     {
         cout << a + b << endl;
     }
-    catch (const char* message)
+    catch (logic_error err)
     {
-        cout << "error: " << message << endl;
+        cout << "error: " << err.what() << endl;
     }
 
     cout << "a-b: " << (a.is_suitable_for_addiction(b) ? "(possible)" : "(impossible)") << endl;
@@ -37,9 +37,9 @@ void do_stuffs()
     {
         cout << a - b << endl;
     }
-    catch (const char* message)
+    catch (logic_error err)
     {
-        cout << "error: " << message << endl;
+        cout << "error: " << err.what() << endl;
     }
 
     cout << "e*a: " << (e.is_suitable_for_multiplication(a) ? "(possible)" : "(impossible)") << endl;
@@ -47,9 +47,9 @@ void do_stuffs()
     {
         cout << e * a << endl;
     }
-    catch (const char* message)
+    catch (logic_error err)
     {
-        cout << "error: " << message << endl;
+        cout << "error: " << err.what() << endl;
     }
 
     cout << "a*e: " << (a.is_suitable_for_multiplication(e) ? "(possible)" : "(impossible)") << endl;
@@ -57,9 +57,9 @@ void do_stuffs()
     {
         cout << a * e << endl;
     }
-    catch(const char* message)
+    catch(logic_error err)
     {
-        cout <<"error: " << message;
+        cout <<"error: " << err.what() << endl;
     }
 
     cout << endl;
@@ -71,9 +71,11 @@ int main()
     {
         do_stuffs();
     }
-    catch (const char* message)
+    catch (exception err)
     {
-        cout << "\nerror: " << message;
+        cout << "\nerror: " << err.what() << endl;
+        if (0)
+            throw;
     }
 }
 

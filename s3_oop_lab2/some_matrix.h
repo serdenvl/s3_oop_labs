@@ -30,6 +30,7 @@ namespace some_namespace {
 
 		~some_matrix();
 
+		size_t get_id() const;
 		size_t get_row_number() const;
 		size_t get_col_number() const;
 
