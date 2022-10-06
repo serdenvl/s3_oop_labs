@@ -4,86 +4,37 @@
 #include <istream>
 #include <functional>
 
-using init_callback = std::function<double(unsigned int, unsigned int)>;
-const init_callback _default_callback = [](unsigned int i, unsigned int j) { return 0.0; };
+using inds = size_t[2];
+
+using init_callback = std::function<double(size_t, size_t)>;
+const init_callback _default_callback = [](size_t i, size_t j) { return 0.0; };
 
 namespace some_namespace {
 
 	class some_matrix
 	{
-	protected:
+	private:
+		size_t id;
 		double* buffer;
-		unsigned int row_number, col_number;
+		size_t row_number, col_number;
 
 	public:
+		
+		some_matrix(size_t row_number, size_t col_number, init_callback init = _default_callback);
 
-		some_matrix(unsigned int row_number, unsigned int col_number, init_callback init = _default_callback) : row_number(row_number), col_number(col_number)
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix(" << row_number << ":" << col_number << ")"
-				<< " "
-				<< "init: " << ((&init == &_default_callback) ? "default" : "some")
-				<< std::endl;
+		some_matrix(size_t size, init_callback init = _default_callback);
 
-			buffer = new double[row_number * col_number];
-			for (unsigned int i = 0; i < row_number * col_number; ++i)
-				buffer[i] = init(i / col_number, i % col_number);
-		}
+		some_matrix();
 
-		some_matrix(unsigned int size, init_callback init = _default_callback) : some_matrix(size, size, init)
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix(" << size << ")"
-				<< " "
-				<< "init: " << ((&init == &_default_callback) ? "default" : "some")
-				<< std::endl;
-		}
+		some_matrix(const some_matrix& source);
 
-		some_matrix() : some_matrix(1, 1, _default_callback)
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix()"
-				<< std::endl;
-		}
+		~some_matrix();
 
-		some_matrix(const some_matrix& source) : row_number(source.row_number), col_number(source.col_number)
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix(" << &source << ")"
-				<< std::endl;
-
-			buffer = new double[row_number * col_number];
-			for (unsigned int i = 0; i < row_number * col_number; ++i)
-				buffer[i] = source.buffer[i];
-		}
-
-		~some_matrix()
-		{
-			std::cout << "Destructor"
-				<< " "
-				<< "[" << this << "]"
-				<< std::endl;
-
-			delete[] buffer;
-		}
-
-		unsigned int get_row_number() const;
-		unsigned int get_col_number() const;
+		size_t get_row_number() const;
+		size_t get_col_number() const;
 
 		void for_each(std::function<void(double&)> callback) const;
-		void for_each(std::function<void(double&, unsigned int, unsigned int)> callback) const;
+		void for_each(std::function<void(double&, size_t, size_t)> callback) const;
 
 		bool is_suitable_for_multiplication(const some_matrix& other) const;
 		bool is_suitable_for_addiction(const some_matrix& other) const;
@@ -91,11 +42,11 @@ namespace some_namespace {
 		double max() const;
 		double min() const;
 
-		double& operator()(unsigned int i, unsigned int j) const;
+		double& operator[](const inds&& indexs) const;
 
 		friend std::ostream& operator<<(std::ostream& output, const some_matrix& matrix);
 
-		some_matrix operator=(const some_matrix& other) const;
+		some_matrix& operator=(const some_matrix& other);
 		void operator+=(const some_matrix& other);
 		void operator-=(const some_matrix& other);
 		void operator*=(const some_matrix& other);

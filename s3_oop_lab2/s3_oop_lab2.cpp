@@ -7,18 +7,69 @@
 using namespace std;
 using namespace some_namespace;
 
+void do_stuffs()
+{
+    some_matrix e(4, 4, [&](auto i, auto j) {return i == j; });
+    some_matrix a(4, 6, [&](auto i, auto j) {return i + j; });
+    some_matrix b(4, 6, [&](auto i, auto j) {return i * j; });
+
+    cout << "e: " << endl << e << endl;
+    cout << "a: " << endl << a << endl;
+    cout << "b: " << endl << b << endl;
+
+    cout << "a.max: " << a.max() << endl;
+    cout << "a.min: " << a.min() << endl;
+
+    cout << endl;
+
+    cout << "a+b: " << (a.is_suitable_for_addiction(b) ? "(possible)" : "(impossible)") << endl;
+    try
+    {
+        cout << a + b << endl;
+    }
+    catch (const char* message)
+    {
+        cout << "error: " << message << endl;
+    }
+
+    cout << "a-b: " << (a.is_suitable_for_addiction(b) ? "(possible)" : "(impossible)") << endl;
+    try
+    {
+        cout << a - b << endl;
+    }
+    catch (const char* message)
+    {
+        cout << "error: " << message << endl;
+    }
+
+    cout << "e*a: " << (e.is_suitable_for_multiplication(a) ? "(possible)" : "(impossible)") << endl;
+    try
+    {
+        cout << e * a << endl;
+    }
+    catch (const char* message)
+    {
+        cout << "error: " << message << endl;
+    }
+
+    cout << "a*e: " << (a.is_suitable_for_multiplication(e) ? "(possible)" : "(impossible)") << endl;
+    try
+    {
+        cout << a * e << endl;
+    }
+    catch(const char* message)
+    {
+        cout <<"error: " << message;
+    }
+
+    cout << endl;
+}
+
 int main()
 {
     try
     {
-        some_matrix e(4, 4, [](auto i, auto j) {return i == j; });
-        some_matrix m(4, 5, [](auto i, auto j) {return i + j; });
-
-        cout << "e\n" << e << "m\n" << m << "e*m\n" << e * m;
-
-        e *= m;
-
-        cout << "e*=m\n" << e;
+        do_stuffs();
     }
     catch (const char* message)
     {
