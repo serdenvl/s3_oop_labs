@@ -128,7 +128,7 @@ namespace some_namespace
 		return min;
 	}
 
-	double& some_matrix::operator[](const inds&& indexs) const
+	double& some_matrix::operator[](const inds& indexs) const
 	{
 		if (!(0 <= indexs[0] && indexs[0] < row_number) || !(0 <= indexs[1] && indexs[1] < col_number))
 		{

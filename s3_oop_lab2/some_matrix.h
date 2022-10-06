@@ -43,7 +43,7 @@ namespace some_namespace {
 		double max() const;
 		double min() const;
 
-		double& operator[](const inds&& indexs) const;
+		double& operator[](const inds& indexs) const;
 
 		friend std::ostream& operator<<(std::ostream& output, const some_matrix& matrix);
 
