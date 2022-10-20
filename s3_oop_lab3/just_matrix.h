@@ -6,20 +6,18 @@
 
 namespace just_namespace
 {
-	using ind = size_t;
-
-	using init_matrix_callback = std::function<double(const ind&, const ind&)>;
+	using init_matrix_callback = std::function<double(const unsigned int&, const unsigned int&)>;
 	const init_matrix_callback _default_matrix_callback = [](auto, auto) { return 0.0; };
 
 	class just_matrix
 	{
 	protected:
-		size_t id;
+		unsigned int id;
 		double* buffer;
-		ind row_number, col_number;
+		unsigned int row_number, col_number;
 
 	public:
-		just_matrix(const ind& row_number = 1, const ind& col_number = 1,
+		just_matrix(const unsigned int& row_number = 1, const unsigned int& col_number = 1,
 			const init_matrix_callback& init = _default_matrix_callback);
 
 		just_matrix(const just_matrix& source);
@@ -27,12 +25,12 @@ namespace just_namespace
 		virtual ~just_matrix();
 
 		void for_each(std::function<void(double&)> callback) const;
-		void for_each(std::function<void(double&, const ind&, const ind&)> callback) const;
+		void for_each(std::function<void(double&, const unsigned int&, const unsigned int&)> callback) const;
 
 		bool is_suitable_for_addiction(const just_matrix& other) const;
 		bool is_suitable_for_multiplication(const just_matrix& other) const;
 
-		double& operator()(const ind& i, const ind& j) const;
+		double& operator()(const unsigned int& i, const unsigned int& j) const;
 
 		friend std::ostream& operator<<(std::ostream& output, const just_matrix& matrix);
 

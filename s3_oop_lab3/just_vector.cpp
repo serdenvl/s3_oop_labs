@@ -5,13 +5,13 @@ using namespace std;
 namespace just_namespace
 {
 
-	void just_vector::for_each(std::function<void(double&, const ind&)> callback)
+	void just_vector::for_each(std::function<void(double&, const unsigned int&)> callback)
 	{
-		for (ind i = 0; i < row_number * col_number; ++i)
+		for (unsigned int i = 0; i < row_number * col_number; ++i)
 			callback(buffer[i], i);
 	}
 
-	double& just_vector::operator()(const ind& i) const
+	double& just_vector::operator()(const unsigned int& i) const
 	{
 		return buffer[i];
 	}

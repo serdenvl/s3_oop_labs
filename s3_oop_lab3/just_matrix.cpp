@@ -1,25 +1,25 @@
 #include "just_matrix.h"
 
 #include <string>
+#include <sstream>
 #include <iomanip>
+
+#include "stuffs.h"
 
 using namespace std;
 
-static size_t ID = 0;
+static unsigned int ID = 0;
 
 namespace just_namespace
 {
-	just_matrix::just_matrix(const ind& row_number, const ind& col_number,
+	just_matrix::just_matrix(const unsigned int& row_number, const unsigned int& col_number,
 		const init_matrix_callback& init) : row_number(row_number), col_number(col_number), id(++ID)
 	{
-		std::cout << "Constructor"
-			<< " "
-			<< "[" << this << "]"
-			<< " "
-			<< "matrix(" << row_number << ":" << col_number << ")"
-			<< " "
-			<< "init: " << ((&init == &_default_matrix_callback) ? "default" : "some")
-			<< std::endl;
+		cout_structor_info(
+			"Constructor just_matrix base",
+			(stringstream() << "(" << row_number << ":" << col_number << ")").str(),
+			id_string(id, this)
+		);
 
 		buffer = new double[row_number * col_number];
 		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
@@ -28,12 +28,11 @@ namespace just_namespace
 	just_matrix::just_matrix(const just_matrix& source)
 		: row_number(source.row_number), col_number(source.col_number), id(++ID)
 	{
-		std::cout << "Constructor"
-			<< " "
-			<< "[" << this << "]"
-			<< " "
-			<< "matrix(" << &source << ")"
-			<< std::endl;
+		cout_structor_info(
+			"Constructor just_matrix copy",
+			(stringstream() << "(" << "#" << source.id << ")").str(),
+			id_string(id, this)
+		);
 
 		buffer = new double[row_number * col_number];
 		for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
@@ -41,25 +40,24 @@ namespace just_namespace
 
 	just_matrix::~just_matrix()
 	{
-		std::cout << "Destructor"
-			<< " "
-			<< "[" << this << "]"
-			<< " "
-			<< "matrix"
-			<< std::endl;
+		cout_structor_info(
+			"Destructor just_matrix",
+			"",
+			id_string(id, this)
+		);
 
 		delete[] buffer;
 	}
 
 	void just_matrix::for_each(function<void(double&)> callback) const
 	{
-		for (ind i = 0; i < row_number * col_number; ++i)
+		for (unsigned int i = 0; i < row_number * col_number; ++i)
 			callback(buffer[i]);
 	}
 
-	void just_matrix::for_each(function<void(double&, const ind&, const ind&)> callback) const
+	void just_matrix::for_each(function<void(double&, const unsigned int&, const unsigned int&)> callback) const
 	{
-		for (ind i = 0; i < row_number * col_number; ++i)
+		for (unsigned int i = 0; i < row_number * col_number; ++i)
 			callback(buffer[i], i / col_number, i % col_number);
 	}
 
@@ -73,7 +71,7 @@ namespace just_namespace
 		return col_number == other.row_number;
 	}
 
-	double& just_matrix::operator()(const ind& i, const ind& j) const
+	double& just_matrix::operator()(const unsigned int& i, const unsigned int& j) const
 	{
 		if (!(0 <= i && i < row_number) || !(0 <= j && j < col_number))
 		{
