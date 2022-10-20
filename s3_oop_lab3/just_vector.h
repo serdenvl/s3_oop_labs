@@ -1,10 +1,11 @@
 #pragma once
 
-#include "just_matrix.h"
-
 #include <iostream>
-#include <istream>
+#include <sstream>
 #include <functional>
+
+#include "just_matrix.h"
+#include "stuffs.h"
 
 namespace just_namespace
 {
@@ -15,18 +16,9 @@ namespace just_namespace
 	class just_vector : public just_matrix
 	{
 	public:
-		just_vector(const unsigned int& length = 1, const init_vector_callback& init = _default_vector_callback)
-			: just_matrix(length, 1, [&](auto i, auto) {return init(i); })
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "vector(" << length << ")"
-				<< " "
-				<< "init: " << ((&init == &_default_vector_callback) ? "default" : "some")
-				<< std::endl;
-		}
+		just_vector(const unsigned int& length, const init_vector_callback& init = _default_vector_callback);
+
+		just_vector();
 
 		void for_each(std::function<void(double&, const unsigned int&)> callback);
 

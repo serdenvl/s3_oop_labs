@@ -31,7 +31,14 @@ namespace just_namespace
 		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
 	}
 
-	just_matrix::just_matrix() : just_matrix(0, 0) {}
+	just_matrix::just_matrix() : just_matrix(0, 0) 
+	{
+		cout_structor_info(
+			"Constructor just_matrix default",
+			"()",
+			id_string(id, this)
+		);
+	}
 
 	just_matrix::just_matrix(const just_matrix& source) : id(++ID)
 	{
