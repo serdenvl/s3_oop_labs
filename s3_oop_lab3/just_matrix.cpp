@@ -1,4 +1,5 @@
 #include "just_matrix.h"
+
 #include <string>
 #include <iomanip>
 
@@ -9,7 +10,7 @@ static size_t ID = 0;
 namespace just_namespace
 {
 	just_matrix::just_matrix(const ind& row_number, const ind& col_number,
-		const init_matrix_callback& init) : row_number(row_number), col_number(col_number)
+		const init_matrix_callback& init) : row_number(row_number), col_number(col_number), id(++ID)
 	{
 		std::cout << "Constructor"
 			<< " "
@@ -24,7 +25,8 @@ namespace just_namespace
 		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
 	}
 
-	just_matrix::just_matrix(const just_matrix& source) : row_number(source.row_number), col_number(source.col_number)
+	just_matrix::just_matrix(const just_matrix& source)
+		: row_number(source.row_number), col_number(source.col_number), id(++ID)
 	{
 		std::cout << "Constructor"
 			<< " "
