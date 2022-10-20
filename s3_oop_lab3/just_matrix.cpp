@@ -4,8 +4,50 @@
 
 using namespace std;
 
+static size_t ID = 0;
+
 namespace just_namespace
 {
+	just_matrix::just_matrix(const ind& row_number, const ind& col_number,
+		const init_matrix_callback& init) : row_number(row_number), col_number(col_number)
+	{
+		std::cout << "Constructor"
+			<< " "
+			<< "[" << this << "]"
+			<< " "
+			<< "matrix(" << row_number << ":" << col_number << ")"
+			<< " "
+			<< "init: " << ((&init == &_default_matrix_callback) ? "default" : "some")
+			<< std::endl;
+
+		buffer = new double[row_number * col_number];
+		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
+	}
+
+	just_matrix::just_matrix(const just_matrix& source) : row_number(source.row_number), col_number(source.col_number)
+	{
+		std::cout << "Constructor"
+			<< " "
+			<< "[" << this << "]"
+			<< " "
+			<< "matrix(" << &source << ")"
+			<< std::endl;
+
+		buffer = new double[row_number * col_number];
+		for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
+	}
+
+	just_matrix::~just_matrix()
+	{
+		std::cout << "Destructor"
+			<< " "
+			<< "[" << this << "]"
+			<< " "
+			<< "matrix"
+			<< std::endl;
+
+		delete[] buffer;
+	}
 
 	void just_matrix::for_each(function<void(double&)> callback) const
 	{

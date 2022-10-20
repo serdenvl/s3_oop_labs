@@ -4,61 +4,27 @@
 #include <istream>
 #include <functional>
 
-using ind = size_t;
-
-using init_matrix_callback = std::function<double(const ind&, const ind&)>;
-const init_matrix_callback _default_matrix_callback = [](auto, auto) { return 0.0; };
-
 namespace just_namespace
 {
+	using ind = size_t;
+
+	using init_matrix_callback = std::function<double(const ind&, const ind&)>;
+	const init_matrix_callback _default_matrix_callback = [](auto, auto) { return 0.0; };
 
 	class just_matrix
 	{
 	protected:
+		size_t id;
 		double* buffer;
 		ind row_number, col_number;
 
 	public:
 		just_matrix(const ind& row_number = 1, const ind& col_number = 1,
-			const init_matrix_callback& init = _default_matrix_callback) : row_number(row_number), col_number(col_number)
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix(" << row_number << ":" << col_number << ")"
-				<< " "
-				<< "init: " << ((&init == &_default_matrix_callback) ? "default" : "some")
-				<< std::endl;
+			const init_matrix_callback& init = _default_matrix_callback);
 
-			buffer = new double[row_number * col_number];
-			for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
-		}
+		just_matrix(const just_matrix& source);
 
-		just_matrix(const just_matrix& source) : row_number(source.row_number), col_number(source.col_number)
-		{
-			std::cout << "Constructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix(" << &source << ")"
-				<< std::endl;
-
-			buffer = new double[row_number * col_number];
-			for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
-		}
-
-		virtual ~just_matrix()
-		{
-			std::cout << "Destructor"
-				<< " "
-				<< "[" << this << "]"
-				<< " "
-				<< "matrix"
-				<< std::endl;
-
-			delete[] buffer;
-		}
+		virtual ~just_matrix();
 
 		void for_each(std::function<void(double&)> callback) const;
 		void for_each(std::function<void(double&, const ind&, const ind&)> callback) const;
