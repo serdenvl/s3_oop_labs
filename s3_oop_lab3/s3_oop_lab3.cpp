@@ -8,18 +8,20 @@
 using namespace std;
 using namespace just_namespace;
 
+void do_stuffs()
+{
+
+}
+
 int main()
 {
     try
     {
-        just_matrix m(5, 5, [](auto i, auto j) {return i == j; });
-        just_vector v(5, [](auto i) {return i; });
-
-        std::cout << m * v;
+        do_stuffs();
     }
-    catch(const char* message)
+    catch (exception err)
     {
-        cout << "\nerror: " << message << endl;
+        cout << "\nerror: " << err.what() << endl;
     }
 }
 
