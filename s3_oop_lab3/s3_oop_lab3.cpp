@@ -13,6 +13,10 @@ void do_stuffs()
     just_matrix zero;
 
     zero *= zero;
+
+    just_vector v(5);
+
+    cout << v;
 }
 
 int main()

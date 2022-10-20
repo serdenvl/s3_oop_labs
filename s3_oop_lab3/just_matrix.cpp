@@ -115,7 +115,13 @@ namespace just_namespace
 	{
 		if (!(0 <= indexs[0] && indexs[0] < row) || !(0 <= indexs[1] && indexs[1] < col))
 		{
-			throw "index out of range";
+			ostringstream message;
+			message << "accessing an element"
+				<< " "
+				<< "by index " << "(" << indexs[0] << "," << indexs[1] << ")"
+				<< " "
+				<< "of the matrix #" << id << " " << "(size:" << row << "x" << col << ")";
+			throw out_of_range(message.str());
 		}
 
 		return buffer[indexs[0] * col + indexs[1]];
@@ -126,8 +132,7 @@ namespace just_namespace
 		row = other.row;
 		col = other.col;
 		delete[] exchange(buffer, new double[row*col]);
-		for_each([&](auto& v, auto i, auto j) {v = other[inds{ i, j }];
-	});
+		for_each([&](auto& v, auto i, auto j) {v = other[inds{ i, j }]; });
 
 		return *this;
 	}
@@ -145,7 +150,16 @@ namespace just_namespace
 	{
 		if (!check_sum(other))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row << "x" << col << ")"
+				<< " "
+				<< "+="
+				<< " "
+				<< "matrix #" << other.id << "(size:" << other.row << "x" << other.col << ")";
+
+			throw logic_error(message.str());
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v += other[inds{ i, j }]; });
@@ -156,7 +170,16 @@ namespace just_namespace
 	{
 		if (!check_sum(other))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row << "x" << col << ")"
+				<< " "
+				<< "-="
+				<< " "
+				<< "matrix #" << other.id << "(size:" << other.row << "x" << other.col << ")";
+
+			throw logic_error(message.str());
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v -= other[inds{ i, j }]; });
@@ -167,7 +190,16 @@ namespace just_namespace
 	{
 		if (!check_sum(other))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row << "x" << col << ")"
+				<< " "
+				<< "+"
+				<< " "
+				<< "matrix #" << other.id << "(size:" << other.row << "x" << other.col << ")";
+
+			throw logic_error(message.str());
 		}
 
 		return just_matrix(row, col, [&](auto i, auto j) { return (*this)[inds{ i, j }] + other[inds{ i, j }]; });
@@ -177,7 +209,16 @@ namespace just_namespace
 	{
 		if (!check_sum(other))
 		{
-			throw "addiction is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row << "x" << col << ")"
+				<< " "
+				<< "-"
+				<< " "
+				<< "matrix #" << other.id << "(size:" << other.row << "x" << other.col << ")";
+
+			throw logic_error(message.str());
 		}
 
 		return just_matrix(row, col, [&](auto i, auto j) { return (*this)[inds{ i, j }] - other[inds{ i, j }]; });
@@ -187,15 +228,29 @@ namespace just_namespace
 	{
 		if (!check_mul(other))
 		{
-			throw "multiplication is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row << "x" << col << ")"
+				<< " "
+				<< "*="
+				<< " "
+				<< "matrix #" << other.id << "(size:" << other.row << "x" << other.col << ")";
+
+			throw logic_error(message.str());
 		}
 
-		just_matrix m = (*this) * other;
+		double* buf = exchange(buffer, new double[row * other.col]{});
+		unsigned int old_cols = exchange(col, other.col);
 
-		row = m.row;
-		col = m.col;
-		delete[] exchange(buffer, exchange(m.buffer, nullptr));
+		for_each([&](auto& v, auto i, auto j) {
+			for (unsigned k = 0; k < row; ++k)
+			{
+				v += buf[i * old_cols + k] * other[inds{ k, j }];
+			}
+			});
 
+		delete[] buf;
 		return *this;
 	}
 
@@ -203,17 +258,19 @@ namespace just_namespace
 	{
 		if (!check_mul(other))
 		{
-			throw "multiplication is impossible";
+			ostringstream message;
+			message << "attempt"
+				<< " "
+				<< "matrix #" << id << "(size:" << row << "x" << col << ")"
+				<< " "
+				<< "*"
+				<< " "
+				<< "matrix #" << other.id << "(size:" << other.row << "x" << other.col << ")";
+
+			throw logic_error(message.str());
 		}
 
-		return just_matrix(row, other.col, [&](auto i, auto j) {
-			double sum = 0.0;
-			for (unsigned k = 0; k < row; ++k)
-			{
-				sum += (*this)[inds{ i, k }] * other[inds{ k, j }];
-			}
-			return sum;
-			});
+		return just_matrix(*this) *= other;
 	}
 
 	just_matrix& just_matrix::operator*=(const double& num)
