@@ -77,8 +77,6 @@ int main()
     catch (exception err)
     {
         cout << "\nerror: " << err.what() << endl;
-        if (0)
-            throw;
     }
 }
 
