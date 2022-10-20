@@ -11,20 +11,13 @@ static unsigned int ID = 0;
 
 namespace some_namespace
 {
-	some_matrix::some_matrix(unsigned int row, unsigned int col, init_callback init)
-		: row(row), col(col), id(++ID)
+	some_matrix::some_matrix(unsigned int row, unsigned int col, init_callback init) : row(row), col(col), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor some_matrix base",
 			(stringstream() << "(" << row << "," << col << ")").str(),
 			id_string(id, this)
 		);
-
-		if (row == 0 || col == 0)
-		{
-			buffer = nullptr;
-			return;
-		}
 
 		buffer = new double[row * col];
 		for (unsigned int i = 0; i < row * col; ++i)
@@ -42,7 +35,7 @@ namespace some_namespace
 		);
 	}
 
-	some_matrix::some_matrix() : some_matrix(0, 0, _default_callback)
+	some_matrix::some_matrix() : row(0), col(0), buffer(nullptr), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor some_matrix default",
@@ -51,7 +44,7 @@ namespace some_namespace
 		);
 	}
 
-	some_matrix::some_matrix(const some_matrix& source) : row(source.row), col(source.col), id(++ID)
+	some_matrix::some_matrix(const some_matrix& source) : some_matrix()
 	{
 		cout_structor_info(
 			"Constructor some_matrix copy",
@@ -59,12 +52,10 @@ namespace some_namespace
 			id_string(id, this)
 		);
 
-		buffer = new double[row * col];
-		for (unsigned int i = 0; i < row * col; ++i)
-			buffer[i] = source.buffer[i];
+		*this = (const some_matrix&)source;
 	}
 
-	some_matrix::some_matrix(some_matrix&& source) : row(source.row), col(source.col), id(++ID)
+	some_matrix::some_matrix(some_matrix&& source) : some_matrix()
 	{
 		cout_structor_info(
 			"Constructor some_matrix move",
@@ -72,7 +63,7 @@ namespace some_namespace
 			id_string(id, this)
 		);
 
-		buffer = exchange(source.buffer, nullptr);
+		*this = (some_matrix&&)source;
 	}
 
 	some_matrix::~some_matrix()
@@ -82,7 +73,7 @@ namespace some_namespace
 			"",
 			id_string(id, this)
 		);
-
+		
 		delete[] buffer;
 	}
 
@@ -158,11 +149,9 @@ namespace some_namespace
 
 	some_matrix& some_matrix::operator=(const some_matrix& other)
 	{
-		delete[] buffer;
-
 		row = other.row;
 		col = other.col;
-		buffer = new double[row * col];
+		delete[] exchange(buffer, new double[row * col]);
 
 		for_each([&](auto& v, auto i, auto j) {v = other[inds{ i, j }]; });
 
@@ -171,11 +160,9 @@ namespace some_namespace
 
 	some_matrix& some_matrix::operator=(some_matrix&& other)
 	{
-		delete[] buffer;
-
 		row = other.row;
 		col = other.col;
-		delete [] exchange(buffer, exchange(other.buffer, nullptr));
+		delete[] exchange(buffer, exchange(other.buffer, nullptr));
 
 		return *this;
 	}
