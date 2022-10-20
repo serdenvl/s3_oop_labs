@@ -14,10 +14,10 @@ namespace just_namespace
 	protected:
 		unsigned int id;
 		double* buffer;
-		unsigned int row_number, col_number;
+		unsigned int row, col;
 
 	public:
-		explicit just_matrix(const unsigned int& row_number, const unsigned int& col_number,
+		explicit just_matrix(const unsigned int& row, const unsigned int& col,
 			const init_matrix_callback& init = _default_matrix_callback);
 
 		explicit just_matrix();
@@ -27,11 +27,15 @@ namespace just_namespace
 
 		virtual ~just_matrix();
 
+		unsigned int get_id() const;
+		unsigned int get_row() const;
+		unsigned int get_col() const;
+
 		void for_each(std::function<void(double&)> callback) const;
 		void for_each(std::function<void(double&, const unsigned int&, const unsigned int&)> callback) const;
 
-		bool is_suitable_for_addiction(const just_matrix& other) const;
-		bool is_suitable_for_multiplication(const just_matrix& other) const;
+		bool check_sum(const just_matrix& other) const;
+		bool check_mul(const just_matrix& other) const;
 
 		double& operator()(const unsigned int& i, const unsigned int& j) const;
 
@@ -47,8 +51,8 @@ namespace just_namespace
 		void operator*=(const just_matrix& other);
 		just_matrix operator*(const just_matrix& other) const;
 
-		void operator*=(const double& a);
-		just_matrix operator*(const double& a) const;
+		void operator*=(const double& num);
+		just_matrix operator*(const double& num) const;
 	};
 
 }

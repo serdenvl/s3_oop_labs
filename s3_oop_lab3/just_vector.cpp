@@ -7,7 +7,7 @@ namespace just_namespace
 
 	void just_vector::for_each(std::function<void(double&, const unsigned int&)> callback)
 	{
-		for (unsigned int i = 0; i < row_number * col_number; ++i)
+		for (unsigned int i = 0; i < row * col; ++i)
 			callback(buffer[i], i);
 	}
 

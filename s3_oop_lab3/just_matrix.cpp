@@ -12,29 +12,29 @@ static unsigned int ID = 0;
 
 namespace just_namespace
 {
-	just_matrix::just_matrix(const unsigned int& row_number, const unsigned int& col_number,
-		const init_matrix_callback& init) : row_number(row_number), col_number(col_number), id(++ID)
+	just_matrix::just_matrix(const unsigned int& row, const unsigned int& col,
+		const init_matrix_callback& init) : row(row), col(col), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor just_matrix base",
-			(stringstream() << "(" << row_number << ":" << col_number << ")").str(),
+			(stringstream() << "(" << row << ":" << col << ")").str(),
 			id_string(id, this)
 		);
 
-		if (row_number == 0 || col_number == 0)
+		if (row == 0 || col == 0)
 		{
 			buffer = nullptr;
 			return;
 		}
 
-		buffer = new double[row_number * col_number];
+		buffer = new double[row * col];
 		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
 	}
 
 	just_matrix::just_matrix() : just_matrix(0, 0) {}
 
 	just_matrix::just_matrix(const just_matrix& source)
-		: row_number(source.row_number), col_number(source.col_number), id(++ID)
+		: row(source.row), col(source.col), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor just_matrix copy",
@@ -42,12 +42,12 @@ namespace just_namespace
 			id_string(id, this)
 		);
 
-		buffer = new double[row_number * col_number];
+		buffer = new double[row * col];
 		for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
 	}
 
 	just_matrix::just_matrix(just_matrix&& source)
-		 : row_number(source.row_number), col_number(source.col_number), id(++ID)
+		 : row(source.row), col(source.col), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor just_matrix move",
@@ -68,36 +68,51 @@ namespace just_namespace
 		delete[] buffer;
 	}
 
+	unsigned int just_matrix::get_id() const
+	{
+		return id;
+	}
+
+	unsigned int just_matrix::get_row() const
+	{
+		return row;
+	}
+
+	unsigned int just_matrix::get_col() const
+	{
+		return col;
+	}
+
 	void just_matrix::for_each(function<void(double&)> callback) const
 	{
-		for (unsigned int i = 0; i < row_number * col_number; ++i)
+		for (unsigned int i = 0; i < row * col; ++i)
 			callback(buffer[i]);
 	}
 
 	void just_matrix::for_each(function<void(double&, const unsigned int&, const unsigned int&)> callback) const
 	{
-		for (unsigned int i = 0; i < row_number * col_number; ++i)
-			callback(buffer[i], i / col_number, i % col_number);
+		for (unsigned int i = 0; i < row * col; ++i)
+			callback(buffer[i], i / col, i % col);
 	}
 
-	bool just_matrix::is_suitable_for_addiction(const just_matrix& other) const
+	bool just_matrix::check_sum(const just_matrix& other) const
 	{
-		return row_number == other.row_number && col_number == other.col_number;
+		return row == other.row && col == other.col;
 	}
 
-	bool just_matrix::is_suitable_for_multiplication(const just_matrix& other) const
+	bool just_matrix::check_mul(const just_matrix& other) const
 	{
-		return col_number == other.row_number;
+		return col == other.row;
 	}
 
 	double& just_matrix::operator()(const unsigned int& i, const unsigned int& j) const
 	{
-		if (!(0 <= i && i < row_number) || !(0 <= j && j < col_number))
+		if (!(0 <= i && i < row) || !(0 <= j && j < col))
 		{
 			throw "index out of range";
 		}
 
-		return buffer[i * col_number + j];
+		return buffer[i * col + j];
 	}
 
 	just_matrix just_matrix::operator=(const just_matrix& other) const
@@ -107,7 +122,7 @@ namespace just_namespace
 
 	void just_matrix::operator+=(const just_matrix& other)
 	{
-		if (!is_suitable_for_addiction(other))
+		if (!check_sum(other))
 		{
 			throw "addiction is impossible";
 		}
@@ -117,7 +132,7 @@ namespace just_namespace
 
 	void just_matrix::operator-=(const just_matrix& other)
 	{
-		if (!is_suitable_for_addiction(other))
+		if (!check_sum(other))
 		{
 			throw "addiction is impossible";
 		}
@@ -127,48 +142,48 @@ namespace just_namespace
 
 	just_matrix just_matrix::operator+(const just_matrix& other) const
 	{
-		if (!is_suitable_for_addiction(other))
+		if (!check_sum(other))
 		{
 			throw "addiction is impossible";
 		}
 
-		return just_matrix(row_number, col_number, [&](auto i, auto j) { return (*this)(i, j) + other(i, j); });
+		return just_matrix(row, col, [&](auto i, auto j) { return (*this)(i, j) + other(i, j); });
 	}
 
 	just_matrix just_matrix::operator-(const just_matrix& other) const
 	{
-		if (!is_suitable_for_addiction(other))
+		if (!check_sum(other))
 		{
 			throw "addiction is impossible";
 		}
 
-		return just_matrix(row_number, col_number, [&](auto i, auto j) { return (*this)(i, j) - other(i, j); });
+		return just_matrix(row, col, [&](auto i, auto j) { return (*this)(i, j) - other(i, j); });
 	}
 
 	void just_matrix::operator*=(const just_matrix& other)
 	{
-		if (!is_suitable_for_multiplication(other))
+		if (!check_mul(other))
 		{
 			throw "multiplication is impossible";
 		}
 
 		just_matrix m = (*this) * other;
 
-		row_number = m.row_number;
-		col_number = m.col_number;
+		row = m.row;
+		col = m.col;
 		delete[] exchange(buffer, exchange(m.buffer, nullptr));
 	}
 
 	just_matrix just_matrix::operator*(const just_matrix& other) const
 	{
-		if (!is_suitable_for_multiplication(other))
+		if (!check_mul(other))
 		{
 			throw "multiplication is impossible";
 		}
 
-		return just_matrix(row_number, other.col_number, [&](auto i, auto j) {
+		return just_matrix(row, other.col, [&](auto i, auto j) {
 			double sum = 0.0;
-			for (unsigned k = 0; k < row_number; ++k)
+			for (unsigned k = 0; k < row; ++k)
 			{
 				sum += (*this)(i, k) * other(k, j);
 			}
@@ -176,14 +191,14 @@ namespace just_namespace
 			});
 	}
 
-	void just_matrix::operator*=(const double& a)
+	void just_matrix::operator*=(const double& num)
 	{
-		for_each([&](auto& v) { v *= a; });
+		for_each([&](auto& v) { v *= num; });
 	}
 
-	just_matrix just_matrix::operator*(const double& a) const
+	just_matrix just_matrix::operator*(const double& num) const
 	{
-		return just_matrix(row_number, col_number, [&](auto i, auto j) { return (*this)(i, j) * a; });
+		return just_matrix(row, col, [&](auto i, auto j) { return (*this)(i, j) * num; });
 	}
 
 	ostream& operator<<(ostream& output, const just_matrix& matrix)
@@ -191,7 +206,7 @@ namespace just_namespace
 		matrix.for_each([&](auto v, auto i, auto j)
 			{
 				output << setw(3) << matrix(i, j);
-				if (j + 1 == matrix.col_number)
+				if (j + 1 == matrix.col)
 					output << endl;
 			});
 		return output;
