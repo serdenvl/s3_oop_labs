@@ -104,14 +104,14 @@ namespace just_namespace
 		return col == other.row;
 	}
 
-	double& just_matrix::operator()(const unsigned int& i, const unsigned int& j) const
+	double& just_matrix::operator[](const inds& indexs) const
 	{
-		if (!(0 <= i && i < row) || !(0 <= j && j < col))
+		if (!(0 <= indexs[0] && indexs[0] < row) || !(0 <= indexs[1] && indexs[1] < col))
 		{
 			throw "index out of range";
 		}
 
-		return buffer[i * col + j];
+		return buffer[indexs[0] * col + indexs[1]];
 	}
 
 	just_matrix& just_matrix::operator=(const just_matrix& other)
@@ -119,7 +119,8 @@ namespace just_namespace
 		row = other.row;
 		col = other.col;
 		delete[] exchange(buffer, new double[row*col]);
-		for_each([&](auto& v, auto i, auto j) {v = other(i, j); });
+		for_each([&](auto& v, auto i, auto j) {v = other[inds{ i, j }];
+	});
 
 		return *this;
 	}
@@ -140,7 +141,7 @@ namespace just_namespace
 			throw "addiction is impossible";
 		}
 
-		for_each([&](auto& v, auto i, auto j) { v += other(i, j); });
+		for_each([&](auto& v, auto i, auto j) { v += other[inds{ i, j }]; });
 	}
 
 	void just_matrix::operator-=(const just_matrix& other)
@@ -150,7 +151,7 @@ namespace just_namespace
 			throw "addiction is impossible";
 		}
 
-		for_each([&](auto& v, auto i, auto j) { v -= other(i, j); });
+		for_each([&](auto& v, auto i, auto j) { v -= other[inds{ i, j }]; });
 	}
 
 	just_matrix just_matrix::operator+(const just_matrix& other) const
@@ -160,7 +161,7 @@ namespace just_namespace
 			throw "addiction is impossible";
 		}
 
-		return just_matrix(row, col, [&](auto i, auto j) { return (*this)(i, j) + other(i, j); });
+		return just_matrix(row, col, [&](auto i, auto j) { return (*this)[inds{ i, j }] + other[inds{ i, j }]; });
 	}
 
 	just_matrix just_matrix::operator-(const just_matrix& other) const
@@ -170,7 +171,7 @@ namespace just_namespace
 			throw "addiction is impossible";
 		}
 
-		return just_matrix(row, col, [&](auto i, auto j) { return (*this)(i, j) - other(i, j); });
+		return just_matrix(row, col, [&](auto i, auto j) { return (*this)[inds{ i, j }] - other[inds{ i, j }]; });
 	}
 
 	void just_matrix::operator*=(const just_matrix& other)
@@ -198,7 +199,7 @@ namespace just_namespace
 			double sum = 0.0;
 			for (unsigned k = 0; k < row; ++k)
 			{
-				sum += (*this)(i, k) * other(k, j);
+				sum += (*this)[inds{ i, k }] * other[inds{ k, j }];
 			}
 			return sum;
 			});
@@ -211,14 +212,14 @@ namespace just_namespace
 
 	just_matrix just_matrix::operator*(const double& num) const
 	{
-		return just_matrix(row, col, [&](auto i, auto j) { return (*this)(i, j) * num; });
+		return just_matrix(row, col, [&](auto i, auto j) { return (*this)[inds{ i, j }] * num; });
 	}
 
 	ostream& operator<<(ostream& output, const just_matrix& matrix)
 	{
 		matrix.for_each([&](auto v, auto i, auto j)
 			{
-				output << setw(3) << matrix(i, j);
+				output << setw(3) << matrix[inds{ i, j }];
 				if (j + 1 == matrix.col)
 					output << endl;
 			});

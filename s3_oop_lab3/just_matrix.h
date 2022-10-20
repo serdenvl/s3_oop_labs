@@ -6,6 +6,8 @@
 
 namespace just_namespace
 {
+	using inds = unsigned int[2];
+
 	using init_matrix_callback = std::function<double(const unsigned int&, const unsigned int&)>;
 	const init_matrix_callback _default_matrix_callback = [](auto, auto) { return 0.0; };
 
@@ -37,7 +39,7 @@ namespace just_namespace
 		bool check_sum(const just_matrix& other) const;
 		bool check_mul(const just_matrix& other) const;
 
-		double& operator()(const unsigned int& i, const unsigned int& j) const;
+		double& operator[](const inds& indexs) const;
 
 		friend std::ostream& operator<<(std::ostream& output, const just_matrix& matrix);
 
