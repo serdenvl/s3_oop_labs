@@ -46,6 +46,17 @@ namespace just_namespace
 		for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
 	}
 
+	just_matrix::just_matrix(just_matrix&& source)
+		 : row_number(source.row_number), col_number(source.col_number), id(++ID)
+	{
+		cout_structor_info(
+			"Constructor just_matrix move",
+			(stringstream() << "(" << "#" << source.id << ")").str(),
+			id_string(id, this)
+		);
+		buffer = exchange(source.buffer, nullptr);
+	}
+
 	just_matrix::~just_matrix()
 	{
 		cout_structor_info(
