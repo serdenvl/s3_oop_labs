@@ -50,7 +50,7 @@ namespace some_namespace {
 		friend std::ostream& operator<<(std::ostream& output, const some_matrix& matrix);
 
 		some_matrix& operator=(const some_matrix& other);
-		some_matrix& operator=(const some_matrix&& other);
+		some_matrix& operator=(some_matrix&& other);
 
 		some_matrix& operator+=(const some_matrix& other);
 		some_matrix& operator-=(const some_matrix& other);

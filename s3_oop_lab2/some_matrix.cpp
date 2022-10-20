@@ -169,15 +169,13 @@ namespace some_namespace
 		return *this;
 	}
 
-	some_matrix& some_matrix::operator=(const some_matrix&& other)
+	some_matrix& some_matrix::operator=(some_matrix&& other)
 	{
 		delete[] buffer;
 
 		row = other.row;
 		col = other.col;
-		buffer = new double[row * col];
-
-		for_each([&](auto& v, auto i, auto j) {v = other[inds{ i, j }]; });
+		delete [] exchange(buffer, exchange(other.buffer, nullptr));
 
 		return *this;
 	}
