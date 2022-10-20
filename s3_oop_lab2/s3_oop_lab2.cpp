@@ -25,7 +25,7 @@ void do_stuffs()
 
     cout << endl;
 
-    cout << "a+b: " << (a.is_suitable_for_addiction(b) ? "(possible)" : "(impossible)") << endl;
+    cout << "a+b: " << (a.check_sum(b) ? "(possible)" : "(impossible)") << endl;
     try
     {
         cout << a + b << endl;
@@ -35,7 +35,7 @@ void do_stuffs()
         cout << "error: " << err.what() << endl;
     }
 
-    cout << "a-b: " << (a.is_suitable_for_addiction(b) ? "(possible)" : "(impossible)") << endl;
+    cout << "a-b: " << (a.check_sum(b) ? "(possible)" : "(impossible)") << endl;
     try
     {
         cout << a - b << endl;
@@ -45,7 +45,7 @@ void do_stuffs()
         cout << "error: " << err.what() << endl;
     }
 
-    cout << "e*a: " << (e.is_suitable_for_multiplication(a) ? "(possible)" : "(impossible)") << endl;
+    cout << "e*a: " << (e.check_mul(a) ? "(possible)" : "(impossible)") << endl;
     try
     {
         cout << e * a << endl;
@@ -55,7 +55,7 @@ void do_stuffs()
         cout << "error: " << err.what() << endl;
     }
 
-    cout << "a*e: " << (a.is_suitable_for_multiplication(e) ? "(possible)" : "(impossible)") << endl;
+    cout << "a*e: " << (a.check_mul(e) ? "(possible)" : "(impossible)") << endl;
     try
     {
         cout << a * e << endl;
@@ -68,11 +68,20 @@ void do_stuffs()
     cout << endl;
 }
 
+void test()
+{
+    some_matrix a;
+
+    a = (a *= 5.0) += a;
+
+}
+
 int main()
 {
     try
     {
         do_stuffs();
+        //test();
     }
     catch (exception err)
     {

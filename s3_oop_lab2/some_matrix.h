@@ -4,41 +4,43 @@
 #include <istream>
 #include <functional>
 
-using inds = size_t[2];
-
-using init_callback = std::function<double(size_t, size_t)>;
-const init_callback _default_callback = [](size_t i, size_t j) { return 0.0; };
-
 namespace some_namespace {
+
+	using inds = unsigned int[2];
+
+	using init_callback = std::function<double(unsigned int, unsigned int)>;
+	const init_callback _default_callback = [](unsigned int i, unsigned int j) { return 0.0; };
 
 	class some_matrix
 	{
 	private:
-		size_t id;
+		unsigned int id;
 		double* buffer;
-		size_t row_number, col_number;
+		unsigned int row, col;
 
 	public:
 		
-		some_matrix(size_t row_number, size_t col_number, init_callback init = _default_callback);
+		explicit some_matrix(unsigned int rows, unsigned int cols, init_callback init = _default_callback);
 
-		some_matrix(size_t size, init_callback init = _default_callback);
+		explicit some_matrix(unsigned int size, init_callback init = _default_callback);
 
-		some_matrix();
+		explicit some_matrix();
 
 		some_matrix(const some_matrix& source);
 
+		some_matrix(const some_matrix&& source);
+
 		~some_matrix();
 
-		size_t get_id() const;
-		size_t get_row_number() const;
-		size_t get_col_number() const;
+		unsigned int get_id() const;
+		unsigned int get_row() const;
+		unsigned int get_col() const;
 
 		void for_each(std::function<void(double&)> callback) const;
-		void for_each(std::function<void(double&, size_t, size_t)> callback) const;
+		void for_each(std::function<void(double&, unsigned int, unsigned int)> callback) const;
 
-		bool is_suitable_for_multiplication(const some_matrix& other) const;
-		bool is_suitable_for_addiction(const some_matrix& other) const;
+		bool check_mul(const some_matrix& other) const;
+		bool check_sum(const some_matrix& other) const;
 
 		double max() const;
 		double min() const;
@@ -48,15 +50,17 @@ namespace some_namespace {
 		friend std::ostream& operator<<(std::ostream& output, const some_matrix& matrix);
 
 		some_matrix& operator=(const some_matrix& other);
-		void operator+=(const some_matrix& other);
-		void operator-=(const some_matrix& other);
-		void operator*=(const some_matrix& other);
-		void operator*=(double& other);
+		some_matrix& operator=(const some_matrix&& other);
+
+		some_matrix& operator+=(const some_matrix& other);
+		some_matrix& operator-=(const some_matrix& other);
+		some_matrix& operator*=(const some_matrix& other);
+		some_matrix& operator*=(const double& other);
 	};
 
 	some_matrix operator+(const some_matrix& A, const some_matrix& B);
 	some_matrix operator-(const some_matrix& A, const some_matrix& B);
 	some_matrix operator*(const some_matrix& A, const some_matrix& B);
-	some_matrix operator*(const some_matrix& A, double a);
+	some_matrix operator*(const some_matrix& A, double num);
 
 }
