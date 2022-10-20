@@ -17,8 +17,10 @@ namespace just_namespace
 		unsigned int row_number, col_number;
 
 	public:
-		just_matrix(const unsigned int& row_number = 1, const unsigned int& col_number = 1,
+		just_matrix(const unsigned int& row_number, const unsigned int& col_number,
 			const init_matrix_callback& init = _default_matrix_callback);
+
+		just_matrix();
 
 		just_matrix(const just_matrix& source);
 

@@ -10,7 +10,9 @@ using namespace just_namespace;
 
 void do_stuffs()
 {
+    just_matrix zero;
 
+    zero *= zero;
 }
 
 int main()

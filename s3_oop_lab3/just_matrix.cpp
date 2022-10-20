@@ -21,9 +21,17 @@ namespace just_namespace
 			id_string(id, this)
 		);
 
+		if (row_number == 0 || col_number == 0)
+		{
+			buffer = nullptr;
+			return;
+		}
+
 		buffer = new double[row_number * col_number];
 		for_each([&](auto& v, auto i, auto j) { v = init(i, j); });
 	}
+
+	just_matrix::just_matrix() : just_matrix(0, 0) {}
 
 	just_matrix::just_matrix(const just_matrix& source)
 		: row_number(source.row_number), col_number(source.col_number), id(++ID)
