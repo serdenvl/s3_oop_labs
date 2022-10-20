@@ -134,7 +134,7 @@ namespace just_namespace
 		return *this;
 	}
 
-	void just_matrix::operator+=(const just_matrix& other)
+	just_matrix& just_matrix::operator+=(const just_matrix& other)
 	{
 		if (!check_sum(other))
 		{
@@ -142,9 +142,10 @@ namespace just_namespace
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v += other[inds{ i, j }]; });
+		return *this;
 	}
 
-	void just_matrix::operator-=(const just_matrix& other)
+	just_matrix& just_matrix::operator-=(const just_matrix& other)
 	{
 		if (!check_sum(other))
 		{
@@ -152,6 +153,7 @@ namespace just_namespace
 		}
 
 		for_each([&](auto& v, auto i, auto j) { v -= other[inds{ i, j }]; });
+		return *this;
 	}
 
 	just_matrix just_matrix::operator+(const just_matrix& other) const
@@ -174,7 +176,7 @@ namespace just_namespace
 		return just_matrix(row, col, [&](auto i, auto j) { return (*this)[inds{ i, j }] - other[inds{ i, j }]; });
 	}
 
-	void just_matrix::operator*=(const just_matrix& other)
+	just_matrix& just_matrix::operator*=(const just_matrix& other)
 	{
 		if (!check_mul(other))
 		{
@@ -186,6 +188,8 @@ namespace just_namespace
 		row = m.row;
 		col = m.col;
 		delete[] exchange(buffer, exchange(m.buffer, nullptr));
+
+		return *this;
 	}
 
 	just_matrix just_matrix::operator*(const just_matrix& other) const
@@ -205,9 +209,11 @@ namespace just_namespace
 			});
 	}
 
-	void just_matrix::operator*=(const double& num)
+	just_matrix& just_matrix::operator*=(const double& num)
 	{
 		for_each([&](auto& v) { v *= num; });
+
+		return *this;
 	}
 
 	just_matrix just_matrix::operator*(const double& num) const

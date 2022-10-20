@@ -46,15 +46,15 @@ namespace just_namespace
 		just_matrix& operator=(const just_matrix& other);
 		just_matrix& operator=(just_matrix&& other);
 
-		void operator+=(const just_matrix& other);
-		void operator-=(const just_matrix& other);
+		just_matrix& operator+=(const just_matrix& other);
+		just_matrix& operator-=(const just_matrix& other);
 		just_matrix operator+(const just_matrix& other) const;
 		just_matrix operator-(const just_matrix& other) const;
 
-		void operator*=(const just_matrix& other);
+		just_matrix& operator*=(const just_matrix& other);
 		just_matrix operator*(const just_matrix& other) const;
 
-		void operator*=(const double& num);
+		just_matrix& operator*=(const double& num);
 		just_matrix operator*(const double& num) const;
 	};
 
