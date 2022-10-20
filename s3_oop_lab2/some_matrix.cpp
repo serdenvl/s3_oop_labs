@@ -1,6 +1,9 @@
 #include "some_matrix.h"
+
 #include <sstream>
 #include <iomanip>
+
+#include "stuffs.h"
 
 using namespace std;
 
@@ -11,12 +14,11 @@ namespace some_namespace
 	some_matrix::some_matrix(size_t row_number, size_t col_number, init_callback init)
 		: row_number(row_number), col_number(col_number), id(++ID)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix(" << row_number << "," << col_number << ")"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix base",
+			(stringstream() << "(" << row_number << "," << col_number << ")").str(),
+			id_string(id, this)
+		);
 
 		buffer = new double[row_number * col_number];
 		for (size_t i = 0; i < row_number * col_number; ++i)
@@ -31,32 +33,29 @@ namespace some_namespace
 
 	some_matrix::some_matrix(size_t size, init_callback init) : some_matrix(size, size, init)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix(" << size << ")"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix square",
+			(stringstream() << "(" << size << ")").str(),
+			id_string(id, this)
+		);
 	}
 
 	some_matrix::some_matrix() : some_matrix(1, 1, _default_callback)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix()"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix default",
+			"()",
+			id_string(id, this)
+		);
 	}
 
 	some_matrix::some_matrix(const some_matrix& source) : row_number(source.row_number), col_number(source.col_number), id(++ID)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix(" << &source << ")"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix copy",
+			(stringstream() << "(" << "#" << source.id << ")").str(),
+			id_string(id, this)
+		);
 
 		buffer = new double[row_number * col_number];
 		for (size_t i = 0; i < row_number * col_number; ++i)
@@ -65,12 +64,11 @@ namespace some_namespace
 
 	some_matrix::~some_matrix()
 	{
-		cout << setw(50) << right << "Destructor"
-			<< " "
-			<< "matrix"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Destructor some_matrix",
+			"",
+			id_string(id, this)
+		);
 
 		delete[] buffer;
 	}

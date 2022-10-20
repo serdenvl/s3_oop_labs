@@ -13,6 +13,9 @@ void do_stuffs()
     some_matrix a(4, 5, [&](auto i, auto j) {return i + j; });
     some_matrix b(4, 5, [&](auto i, auto j) {return i * j; });
 
+    some_matrix c;
+    some_matrix d(c);
+
     cout << "e: " << endl << e << endl;
     cout << "a: " << endl << a << endl;
     cout << "b: " << endl << b << endl;
