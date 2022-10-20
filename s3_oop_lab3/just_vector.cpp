@@ -11,7 +11,7 @@ namespace just_namespace
 			callback(buffer[i], i);
 	}
 
-	double& just_vector::operator()(const unsigned int& i) const
+	double& just_vector::operator[](const unsigned int& i) const
 	{
 		return buffer[i];
 	}

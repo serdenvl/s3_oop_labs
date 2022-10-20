@@ -30,7 +30,7 @@ namespace just_namespace
 
 		void for_each(std::function<void(double&, const unsigned int&)> callback);
 
-		double& operator()(const unsigned int& i) const;
+		double& operator[](const unsigned int& i) const;
 	};
 
 }
