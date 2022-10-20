@@ -1,6 +1,9 @@
 #include "some_matrix.h"
+
 #include <sstream>
 #include <iomanip>
+
+#include "stuffs.h"
 
 using namespace std;
 
@@ -11,12 +14,11 @@ namespace some_namespace
 	some_matrix::some_matrix(size_t row_number, size_t col_number, init_callback init)
 		: row_number(row_number), col_number(col_number), id(++ID)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix(" << row_number << "," << col_number << ")"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix base",
+			(stringstream() << "(" << row_number << "," << col_number << ")").str(),
+			id_string(id, this)
+		);
 
 		buffer = new double[row_number * col_number];
 		for (size_t i = 0; i < row_number * col_number; ++i)
@@ -31,32 +33,29 @@ namespace some_namespace
 
 	some_matrix::some_matrix(size_t size, init_callback init) : some_matrix(size, size, init)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix(" << size << ")"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix square",
+			(stringstream() << "(" << size << ")").str(),
+			id_string(id, this)
+		);
 	}
 
 	some_matrix::some_matrix() : some_matrix(1, 1, _default_callback)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix()"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix default",
+			"()",
+			id_string(id, this)
+		);
 	}
 
 	some_matrix::some_matrix(const some_matrix& source) : row_number(source.row_number), col_number(source.col_number), id(++ID)
 	{
-		cout << setw(50) << right << "Constructor"
-			<< " "
-			<< "matrix(" << &source << ")"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Constructor some_matrix copy",
+			(stringstream() << "(" << "#" << source.id << ")").str(),
+			id_string(id, this)
+		);
 
 		buffer = new double[row_number * col_number];
 		for (size_t i = 0; i < row_number * col_number; ++i)
@@ -65,12 +64,11 @@ namespace some_namespace
 
 	some_matrix::~some_matrix()
 	{
-		cout << setw(50) << right << "Destructor"
-			<< " "
-			<< "matrix"
-			<< " "
-			<< "[" << "#" << id << " | " << this << "]"
-			<< endl;
+		cout_structor_info(
+			"Destructor some_matrix",
+			"",
+			id_string(id, this)
+		);
 
 		delete[] buffer;
 	}
@@ -153,7 +151,7 @@ namespace some_namespace
 		row_number = other.row_number;
 		col_number = other.col_number;
 
-		for_each([&](auto& v, auto i, auto j) {v = other[inds{i, j}]; });
+		for_each([&](auto& v, auto i, auto j) {v = other[inds{ i, j }]; });
 
 		return *this;
 	}
@@ -173,7 +171,7 @@ namespace some_namespace
 			throw logic_error(message.str());
 		}
 
-		for_each([&](auto& v, auto i, auto j) { v += other[inds{i, j}]; });
+		for_each([&](auto& v, auto i, auto j) { v += other[inds{ i, j }]; });
 	}
 
 	void some_matrix::operator-=(const some_matrix& other)
@@ -191,7 +189,7 @@ namespace some_namespace
 			throw logic_error(message.str());
 		}
 
-		for_each([&](auto& v, auto i, auto j) { v -= other[inds{i, j}]; });
+		for_each([&](auto& v, auto i, auto j) { v -= other[inds{ i, j }]; });
 	}
 
 	void some_matrix::operator*=(const some_matrix& other)
@@ -211,7 +209,7 @@ namespace some_namespace
 	{
 		matrix.for_each([&](auto v, auto i, auto j)
 			{
-				out << setw(3) << matrix[inds{i, j}] << " ";
+				out << setw(3) << matrix[inds{ i, j }] << " ";
 				if (j + 1 == matrix.col_number)
 					out << endl;
 			});
@@ -234,7 +232,7 @@ namespace some_namespace
 			throw logic_error(message.str());
 		}
 
-		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{i, j}] + B[inds{i, j}]; });
+		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{ i, j }] + B[inds{ i, j }]; });
 	}
 
 	some_matrix operator-(const some_matrix& A, const some_matrix& B)
@@ -253,7 +251,7 @@ namespace some_namespace
 			throw logic_error(message.str());
 		}
 
-		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{i, j}] - B[inds{i, j}]; });
+		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{ i, j }] - B[inds{ i, j }]; });
 	}
 
 	some_matrix operator*(const some_matrix& A, const some_matrix& B)
@@ -285,7 +283,7 @@ namespace some_namespace
 
 	some_matrix operator*(const some_matrix& A, double a)
 	{
-		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{i, j}] * a; });
+		return some_matrix(A.get_row_number(), A.get_col_number(), [&](auto i, auto j) { return A[inds{ i, j }] * a; });
 	}
 
 }
