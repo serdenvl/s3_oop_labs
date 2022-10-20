@@ -28,7 +28,7 @@ namespace some_namespace {
 
 		some_matrix(const some_matrix& source);
 
-		some_matrix(const some_matrix&& source);
+		some_matrix(some_matrix&& source);
 
 		~some_matrix();
 

@@ -64,7 +64,7 @@ namespace some_namespace
 			buffer[i] = source.buffer[i];
 	}
 
-	some_matrix::some_matrix(const some_matrix&& source) : row(source.row), col(source.col), id(++ID)
+	some_matrix::some_matrix(some_matrix&& source) : row(source.row), col(source.col), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor some_matrix move",
@@ -72,9 +72,7 @@ namespace some_namespace
 			id_string(id, this)
 		);
 
-		buffer = new double[row * col];
-		for (unsigned int i = 0; i < row * col; ++i)
-			buffer[i] = source.buffer[i];
+		buffer = exchange(source.buffer, nullptr);
 	}
 
 	some_matrix::~some_matrix()
