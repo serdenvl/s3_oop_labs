@@ -20,7 +20,13 @@ namespace some_namespace
 			id_string(id, this)
 		);
 
-		buffer = (row * col != 0) ? new double[row * col] : nullptr;
+		if (row == 0 || col == 0)
+		{
+			buffer = nullptr;
+			return;
+		}
+
+		buffer = new double[row * col];
 		for (unsigned int i = 0; i < row * col; ++i)
 		{
 			buffer[i] = init(i / col, i % col);
