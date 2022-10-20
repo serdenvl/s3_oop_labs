@@ -33,8 +33,7 @@ namespace just_namespace
 
 	just_matrix::just_matrix() : just_matrix(0, 0) {}
 
-	just_matrix::just_matrix(const just_matrix& source)
-		: row(source.row), col(source.col), id(++ID)
+	just_matrix::just_matrix(const just_matrix& source) : id(++ID)
 	{
 		cout_structor_info(
 			"Constructor just_matrix copy",
@@ -42,8 +41,7 @@ namespace just_namespace
 			id_string(id, this)
 		);
 
-		buffer = new double[row * col];
-		for_each([&](auto& v, auto i, auto j) { v = source(i, j); });
+		*this = source;
 	}
 
 	just_matrix::just_matrix(just_matrix&& source)
@@ -54,7 +52,8 @@ namespace just_namespace
 			(stringstream() << "(" << "#" << source.id << ")").str(),
 			id_string(id, this)
 		);
-		buffer = exchange(source.buffer, nullptr);
+		
+		*this = source;
 	}
 
 	just_matrix::~just_matrix()
@@ -115,9 +114,23 @@ namespace just_namespace
 		return buffer[i * col + j];
 	}
 
-	just_matrix just_matrix::operator=(const just_matrix& other) const
+	just_matrix& just_matrix::operator=(const just_matrix& other)
 	{
-		return just_matrix(other);
+		row = other.row;
+		col = other.col;
+		delete[] exchange(buffer, new double[row*col]);
+		for_each([&](auto& v, auto i, auto j) {v = other(i, j); });
+
+		return *this;
+	}
+
+	just_matrix& just_matrix::operator=(just_matrix&& other)
+	{
+		row = exchange(other.row, 0);
+		col = exchange(other.col, 0);
+		delete[] exchange(buffer, exchange(other.buffer, nullptr));
+
+		return *this;
 	}
 
 	void just_matrix::operator+=(const just_matrix& other)

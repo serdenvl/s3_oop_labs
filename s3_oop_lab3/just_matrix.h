@@ -41,7 +41,8 @@ namespace just_namespace
 
 		friend std::ostream& operator<<(std::ostream& output, const just_matrix& matrix);
 
-		just_matrix operator=(const just_matrix& other) const;
+		just_matrix& operator=(const just_matrix& other);
+		just_matrix& operator=(just_matrix&& other);
 
 		void operator+=(const just_matrix& other);
 		void operator-=(const just_matrix& other);
