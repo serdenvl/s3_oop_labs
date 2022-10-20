@@ -129,11 +129,9 @@
   <ItemGroup>
     <ClCompile Include="s3_oop_lab2.cpp" />
     <ClCompile Include="some_matrix.cpp" />
-    <ClCompile Include="stuffs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="some_matrix.h" />
-    <ClInclude Include="stuffs.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

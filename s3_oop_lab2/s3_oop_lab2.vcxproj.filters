@@ -17,15 +17,9 @@
     <ClCompile Include="some_matrix.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="stuffs.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="some_matrix.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
-    <ClInclude Include="stuffs.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
