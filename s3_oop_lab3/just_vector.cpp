@@ -27,7 +27,7 @@ namespace just_namespace
 	{
 		cout_structor_info(
 			"Destructor just_vector",
-			"",
+			(stringstream() << "#" << id).str(),
 			id_string(id, this)
 		);
 	}

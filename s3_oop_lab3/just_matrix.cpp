@@ -67,7 +67,7 @@ namespace just_namespace
 	{
 		cout_structor_info(
 			"Destructor just_matrix",
-			"",
+			(stringstream() << "#" << id).str(),
 			id_string(id, this)
 		);
 

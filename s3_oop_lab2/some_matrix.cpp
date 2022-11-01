@@ -70,7 +70,7 @@ namespace some_namespace
 	{
 		cout_structor_info(
 			"Destructor some_matrix",
-			"",
+			(stringstream() << "#" << id).str(),
 			id_string(id, this)
 		);
 		
