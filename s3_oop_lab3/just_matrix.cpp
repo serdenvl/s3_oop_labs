@@ -289,7 +289,7 @@ namespace just_namespace
 	{
 		matrix.for_each([&](auto v, auto i, auto j)
 			{
-				output << setw(3) << matrix[inds{ i, j }];
+				output << setw(3) << right << matrix[inds{ i, j }] << " ";
 				if (j + 1 == matrix.col)
 					output << endl;
 			});
