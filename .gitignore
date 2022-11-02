@@ -1,8 +1,9 @@
 *.rc
 *aps
 resource.h
-*.vcxproj*
-*.sln
+*.filters
+# *.vcxproj*
+# *.sln
 
 ### template ###
 
