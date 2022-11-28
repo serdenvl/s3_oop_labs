@@ -11,7 +11,7 @@ static unsigned int ID = 0;
 
 namespace some_namespace
 {
-	some_matrix::some_matrix(unsigned int row, unsigned int col, init_callback init) : row(row), col(col), id(++ID)
+	some_matrix::some_matrix(unsigned int row, unsigned int col, const init_callback& init) : row(row), col(col), id(++ID)
 	{
 		cout_structor_info(
 			"Constructor some_matrix base",
@@ -26,7 +26,7 @@ namespace some_namespace
 		}
 	}
 
-	some_matrix::some_matrix(unsigned int size, init_callback init) : some_matrix(size, size, init)
+	some_matrix::some_matrix(unsigned int size, const init_callback& init) : some_matrix(size, size, init)
 	{
 		cout_structor_info(
 			"Constructor some_matrix square",
@@ -55,7 +55,7 @@ namespace some_namespace
 		*this = (const some_matrix&)source;
 	}
 
-	some_matrix::some_matrix(some_matrix&& source) : some_matrix()
+	some_matrix::some_matrix(some_matrix&& source)  noexcept : some_matrix()
 	{
 		cout_structor_info(
 			"Constructor some_matrix move",
@@ -158,7 +158,7 @@ namespace some_namespace
 		return *this;
 	}
 
-	some_matrix& some_matrix::operator=(some_matrix&& other)
+	some_matrix& some_matrix::operator=(some_matrix&& other) noexcept
 	{
 		row = other.row;
 		col = other.col;
@@ -232,7 +232,7 @@ namespace some_namespace
 		return *this;
 	}
 
-	ostream& some_namespace::operator<<(ostream& out, const some_matrix& matrix)
+	ostream& operator<<(ostream& out, const some_matrix& matrix)
 	{
 		matrix.for_each([&](auto v, auto i, auto j)
 			{

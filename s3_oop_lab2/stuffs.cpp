@@ -1,15 +1,15 @@
 #include "stuffs.h"
 
-#include <sstream>
 #include <iomanip>
 #include <iostream>
+#include <cstring>
 
 std::string id_string(size_t id, const void* pointer)
 {
 	return (std::stringstream() << "[" << "#" << id << " | " << pointer << "]").str();
 }
 
-void cout_structor_info(const std::string name, const std::string params, const std::string id)
+void cout_structor_info(const std::string& name, const std::string& params, const std::string& id)
 {
 	constexpr auto example_name = "Constructor some_matrix default";
 	constexpr auto example_params = "(100,100)";
